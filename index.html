@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Calculadora Científica Pro | Minimalista e Rápida</title>
+    <meta name="description" content="Calculadora online gratuita com funções avançadas (Seno, Cosseno, Tangente, Raiz e Potência). Interface moderna, clara e fácil de usar.">
+    <meta name="author" content="Guilherme Vidal">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!--Esse código abaixo define a identidade visual pela da fonte e cria micro-interações táteis, 
+    fazendo com que os botões reduzam de tamanho suavemente ao serem clicados para simular
+     a profundidade e o feedback de um app nativo.-->
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        button:active { transform: scale(0.96); }
+        .calc-button { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+    
+</head>
+
+<body class="bg-slate-50 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <main class="w-full max-w-md">
+        <header class="text-center mb-6">
+            <h1 class="text-slate-800 text-2xl font-bold tracking-tight">Calculadora Inteligente</h1>
+            <p class="text-slate-500 text-xs uppercase tracking-widest mt-1">Alta Precisão & Design Moderno</p>
+        </header>
+
+        <article class="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200 border border-slate-100 overflow-hidden">
+            
+            <section class="p-8 pb-4 text-right bg-gradient-to-b from-white to-slate-50/50" aria-live="polite">
+                <div id="previous-op" class="text-slate-400 text-sm h-6 mb-1 font-medium overflow-hidden"></div>
+                <div id="display" class="text-slate-900 text-5xl font-light truncate tracking-tighter">0</div>
+            </section>
+
+            <div class="grid grid-cols-4 gap-3 p-6 bg-slate-50/30">
+                
+                <button onclick="calc.clear()" class="calc-button col-span-2 bg-red-50 text-red-600 hover:bg-red-100 p-5 rounded-3xl font-bold text-lg">AC</button>
+                <button onclick="calc.appendOperator('**2')" class="calc-button bg-indigo-50 text-indigo-600 hover:bg-indigo-100 p-5 rounded-3xl font-bold">x²</button>
+                <button onclick="calc.calcRoot()" class="calc-button bg-indigo-50 text-indigo-600 hover:bg-indigo-100 p-5 rounded-3xl font-bold">√</button>
+
+                <button onclick="calc.calcTrig('sin')" class="calc-button bg-white border border-slate-100 text-slate-500 hover:bg-slate-100 p-5 rounded-3xl text-xs font-bold uppercase tracking-tighter">Sin</button>
+                <button onclick="calc.calcTrig('cos')" class="calc-button bg-white border border-slate-100 text-slate-500 hover:bg-slate-100 p-5 rounded-3xl text-xs font-bold uppercase tracking-tighter">Cos</button>
+                <button onclick="calc.calcTrig('tan')" class="calc-button bg-white border border-slate-100 text-slate-500 hover:bg-slate-100 p-5 rounded-3xl text-xs font-bold uppercase tracking-tighter">Tan</button>
+                <button onclick="calc.appendOperator('/')" class="calc-button bg-orange-50 text-orange-600 hover:bg-orange-100 p-5 rounded-3xl font-bold text-2xl">÷</button>
+
+                <button onclick="calc.appendNumber('7')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50">7</button>
+                <button onclick="calc.appendNumber('8')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50">8</button>
+                <button onclick="calc.appendNumber('9')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50">9</button>
+                <button onclick="calc.appendOperator('*')" class="calc-button bg-orange-50 text-orange-600 hover:bg-orange-100 p-5 rounded-3xl font-bold text-2xl">×</button>
+
+                <button onclick="calc.appendNumber('4')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50">4</button>
+                <button onclick="calc.appendNumber('5')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50">5</button>
+                <button onclick="calc.appendNumber('6')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50">6</button>
+                <button onclick="calc.appendOperator('-')" class="calc-button bg-orange-50 text-orange-600 hover:bg-orange-100 p-5 rounded-3xl font-bold text-2xl">-</button>
+
+                <button onclick="calc.appendNumber('1')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50">1</button>
+                <button onclick="calc.appendNumber('2')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50">2</button>
+                <button onclick="calc.appendNumber('3')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50">3</button>
+                <button onclick="calc.appendOperator('+')" class="calc-button bg-orange-50 text-orange-600 hover:bg-orange-100 p-5 rounded-3xl font-bold text-2xl">+</button>
+
+                <button onclick="calc.appendNumber('0')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50 col-span-2 text-left px-10">0</button>
+                <button onclick="calc.appendNumber('.')" class="calc-button bg-white text-slate-800 hover:shadow-md p-5 rounded-3xl text-xl font-medium shadow-sm border border-slate-50">.</button>
+                <button onclick="calc.calculate()" class="calc-button bg-orange-500 text-white hover:bg-orange-600 p-5 rounded-3xl shadow-lg shadow-orange-200 font-bold text-2xl">=</button>
+            </div>
+        </article>
+
+        <footer class="mt-8 text-center">
+            <p class="text-slate-400 text-[10px] uppercase tracking-widest leading-loose">
+                Projetado com foco em Estudos em programação e UX design<br>
+                &copy; 2026 - Desenvolvido por Guilherme Vidal
+            </p>
+        </footer>
+    </main>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
